@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>各市财政支出</title>
+    <!--引入echarts-->
+    <script src="js/echarts.min.js"></script>
+</head>
+<body>
+    <div id="main" style="width: 1000px;height: 600px;" align="right"></div>
+
+    <!--浙江各市财政支出-->
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '财政支出(万元)'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['嘉兴市',  '杭州市', '绍兴市', '金华市', '宁波市']
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['2007', '2008',	'2009',	 '2010', '2011', '2012', '2013', '2014', '2015']
+            },
+
+            yAxis: {},
+
+            series: [
+                {
+                    name:'嘉兴市',
+                    type:'line',
+                    data:[1074227, 1359199, 1611146, 1990633, 2406148, 2607030, 3033633, 3349028, 4241331]
+                },
+                {
+                    name:'杭州市',
+                    type:'line',
+                    data:[3357153, 4196674, 4903983, 6165836, 7475004, 7862800, 8557370, 9611771, 12054777]
+                },
+                {
+                    name:'绍兴市',
+                    type:'line',
+                    data:[1138000, 1440441, 1695400, 2219500, 2533100, 2787100, 3121100, 3464400, 4214117]
+                },
+                {
+                    name:'金华市',
+                    type:'line',
+                    data:[1161504, 1375772, 1653599, 2115178, 2350800, 2719529, 3222488, 3528648, 4643797]
+                },
+                {
+                    name:'宁波市',
+                    type:'line',
+                    data:[4978135, 6259266, 7629993, 8987416, 10924780, 12595300, 14021210, 15178560, 17587780]
+                },
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</body>
+</html>
