@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/jee
+        http://www.springframework.org/schema/jee/spring-jee.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--按第三种方式配置-->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/html; charset=UTF-8</value>
+                            <value>application/json;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/html; charset=UTF-8</value>
+                            <value>application/json;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    <!--第一种配置方法，感觉包用错了，换第三种-->
+    <!--&lt;!&ndash; 用于将对象转换为JSON &ndash;&gt;-->
+	<!--&lt;!&ndash;避免IE执行AJAX时，返回JSON出现下载文件&ndash;&gt;-->
+	<!--<bean id="stringConverter" class="org.springframework.http.converter.StringHttpMessageConverter">-->
+		<!--<property name="supportedMediaTypes">-->
+			<!--<list>-->
+				<!--<value>text/plain;charset=UTF-8</value>-->
+			<!--</list>-->
+		<!--</property>-->
+	<!--</bean>-->
+	<!--<bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">		-->
+	<!--</bean>-->
+		<!--&lt;!&ndash; 适配器 &ndash;&gt;-->
+	<!--&lt;!&ndash;启动Spring MVC的注解功能，完成请求和注解POJO的映射&ndash;&gt;-->
+	<!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">-->
+		<!--<property name="messageConverters">-->
+			<!--<list>-->
+				<!--<ref bean="stringConverter"/>-->
+				<!--<ref bean="jsonConverter"/>-->
+			<!--</list>-->
+		<!--</property>-->
+	<!--</bean>-->
+	
+	<!-- 配置注解的扫描:扫描cn.sxt.controller下文件 -->
+	<context:component-scan base-package="dataVisualization.controller"/>
+</beans>
