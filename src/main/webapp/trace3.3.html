@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css"><!--引入bootstrap为了项目美化，并且做简单的布局-->
+    <style>
+        body{
+            padding-top:80px
+        }
+        #search-btn{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 col-md-offset-3">
+            <form class="form-horizontal">
+                <!-- <input id="place-input" type="text" class="form-control" value="" placeholder="请输入地址"> -->
+                <button type="button" id="search-btn" class="btn btn-success">
+                    显示路径
+                </button>
+            </form>
+
+        </div>
+        <div class="col-md-6">
+            <div id="main" style="height:500px;"></div>
+        </div>
+    </div>
+</div>
+<!--引入jQuery来绑定事件，发一下ajax请求-->
+<script src='js/jquery.min.js'></script>
+<script src='js/echarts.min.js'></script>
+
+<script src='js/china.js'></script><!--引入地图 -->
+<script>
+    /*js实现sleep功能 单位：毫秒*/
+    function sleep(numberMillis) {
+        var now = new Date();
+        var exitTime = now.getTime() + numberMillis;
+        while (true) {
+            now = new Date();
+            if (now.getTime() > exitTime)
+                return;
+        }
+    }
+    //将获取到的json数据存入list arr中
+    function getData(){
+        var arr=[];
+        $.ajax({//执行异步 HTTP (Ajax) 请求。
+            type : "get",
+            async : false, //同步执行
+            url : "getJson.do?code=浙B8S196",//请求地址，返回json数据的链接或action
+            data : {},
+            dataType : "json", //自动将返回的字符串转化为json对象。
+            success : function(result) {//成功执行方法：将获取到的数据存入arr list中
+                if (result) {
+                    console.log(result)
+                    for(var i=0;i<result.length;i++){
+                        // console.log(result[i].diming);
+                        arr.push(result[i].diming);
+                        // arr.push(result)
+                        console.log(arr)
+                    }
+                }
+            },
+            error : function(errorMsg) {//错误执行方法
+                alert("不好意思,图表请求数据失败啦!");
+                myChart.hideLoading();
+            }
+        })
+        return arr;
+    }
+
+    // 百度地图的开发者秘钥
+    // var token = 'fHrNQj6DHTjZtfTvfqbsuvTzKc5V9SBl'//qita
+    // var token='53oVIOgmSIejwV7EfphPgTynOZbIiVYu'//wang
+    var token = 'eoZZSPG9ZT1Za0xn4B5wI38Dv5LdGjTp'//wo
+    var url = 'http://api.map.baidu.com/geocoder/v2/?output=json&ak=' + token + '&address='
+    // var ePlaceInput = $('#place-input')
+    var eSearchBtn = $('#search-btn')
+    var myChart = echarts.init(document.getElementById('main'))//初始化echarts
+    var chartData = []//存储搜索返回的记录，（地名，经纬度）比如：[{name: 北京, value: [123,123] }]
+    eSearchBtn.click(function() {
+        // var place = ePlaceInput.val()
+        var place=getData()//获取地点名 list
+        console.log(place);
+
+        for(var i=0;i<place.length;i++){//循环做地图
+            // console.log(place[i]);
+            if (place) {
+                //用jQuery异步获取数据，服务端和客户端的响应请求get请求
+                $.getJSON(url + place[i] + '&callback=?', function(res) {
+                    var loc
+                    if (res.status === 0) {
+                        loc = res.result.location
+                        chartData.push({//chartData格式
+                            name: name,
+                            value: [loc.lng, loc.lat]
+                        })
+                        // console.log(chartData)
+
+
+                        drawMap(place[i])
+
+
+                    }else{
+                        alert('百度没有找到地址信息')
+                    }
+                })
+            }
+
+        }
+
+    })
+
+    // function drawMap() {
+    function drawMap(name) {
+
+        var option = {
+            backgroundColor: '#404a59',
+            title: {
+                text: '路径',
+                left: 'center',
+                textStyle: {
+                    color: '#fff'
+                }
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    saveAsImage: {
+                        show: true
+                    }
+                }
+            },
+            geo: {
+                map: 'china',
+                label: {
+                    emphasis: {
+                        show: false
+                    }
+                },
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: '#323c48',
+                        borderColor: '#111'
+                    },
+                    emphasis: {
+                        areaColor: '#2a333d'
+                    }
+                }
+            },
+            series: [{
+                name: '地址',
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                data: chartData,//展示所有地点的数据，而不是一个地点一个点。数值就是数组内的数据[{name: 北京, value: [123,123] }，{name:上海, value: [123,123] }]
+                symbolSize: function(val) {
+                    return 10;
+                },
+            }]
+        }
+        // setTimeout(function(){},10000)
+        myChart.setOption(option)
+    }
+
+</script>
+</body>
+</html>
