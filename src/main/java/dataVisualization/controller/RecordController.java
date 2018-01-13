@@ -10,7 +10,6 @@
 package dataVisualization.controller;
 
 import dataVisualization.pojo.Record;
-import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,17 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.sf.json.JSONObject;
 
-
-/**
- * ClassName:AuthorController <br/>
- * Function: TODO ADD FUNCTION. <br/>
- * Reason:   TODO ADD REASON. <br/>
- * Date:     2017年12月12日 下午7:11:16 <br/>
- * @author   john-lin
- * @version
- * @since    JDK 1.6
- * @see
- */
 @Controller
 @RequestMapping("record")
 public class RecordController {
@@ -79,20 +67,5 @@ public class RecordController {
 
 		return result;
 	}
-
-	@RequestMapping("/test")
-	//ResponsebBody表示返回的是Json
-	@ResponseBody
-	public String getRecordsByCode(){
-		return "test";
-	}
 }
 
-class Name{
-	public String name;
-
-	public Name(String name) {
-		this.name = name;
-	}
-}
-  

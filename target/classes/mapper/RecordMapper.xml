@@ -4,8 +4,7 @@
 
 <mapper namespace="cn.zju.dataVisualization.mapper.RecordMapper">
   
-<select id="getRecordsByCode" resultType="dataVisualizatin.pojo.Record">
-    select * from record where code=#{code}
-</select>
-
+    <select id="getRecordsByCode" resultType="dataVisualizatin.pojo.Recor">
+        select * from record where code=#{code};
+    </select>
 </mapper>

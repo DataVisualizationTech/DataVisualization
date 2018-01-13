@@ -32,7 +32,7 @@
 	</style>
 	<style type="text/css">
 		body {
-			margin: 100px;
+			margin: 0px;
 		}
 		#main {
 			height: 1%;
@@ -40,7 +40,7 @@
 	</style>
 </head>
 <body>
-	垃圾数据可视化
+
 	<div id = "main" style="width: 1000px; height: 1000px">
 		<script>
 
@@ -71,12 +71,12 @@
                         var container = BMapExt.getEchartsContainer();
 
                         var startPoint = {
-                            x: coordinates.p1[0],
-                            y: coordinates.p1[1],
+                            x: coordinates.p120[0],
+                            y: coordinates.p120[1],
                         };
 
                         var point = new BMap.Point(startPoint.x, startPoint.y);
-                        map.centerAndZoom(point, 17);
+                        map.centerAndZoom(point, 7);
                         map.enableScrollWheelZoom(true);
                         // 地图自定义样式
                         map.setMapStyle({
@@ -264,7 +264,7 @@
                             },
                             color:['gold','red'],
                             legend:{
-                                data:['上班轨迹(甲)','逛街购物轨迹(乙,丙)'],
+                                data:['某辆车一次任务运行轨迹'],
                                 x:'left',
                                 orient:'vertical',
                                 padding:[30,15,15,30],
@@ -280,7 +280,7 @@
                             },
                             series : [
                                 {
-                                    name:'上班轨迹(甲)',
+
                                     type:'map',
                                     mapType: 'none',
                                     data:[],
@@ -309,26 +309,9 @@
                                                     width: 3,
                                                     shadowBlur: 10
                                                 },
-                                                label:{show:false,value:'天河城'}
                                             }
                                         },
 										data : sequences,
-//                                        data : [
-//                                            [{name:'p1'}, {name:'p2'}],
-//                                            [{name:'p2'}, {name:'p3'}],
-//                                            [{name:'p3'}, {name:'p4'}],
-//                                            [{name:'p4'}, {name:'p5'}],
-//                                            [{name:'p5'}, {name:'p6'}],
-//                                            [{name:'p6'}, {name:'p7'}],
-//                                            [{name:'p7'}, {name:'p8'}],
-//                                            [{name:'p8'}, {name:'p9'}],
-//                                            [{name:'p9'}, {name:'p10'}],
-//                                            [{name:'p10'}, {name:'p11'}],
-//                                            [{name:'p11'}, {name:'p12'}],
-//                                            [{name:'p12'}, {name:'p13'}],
-//                                            [{name:'p13'}, {name:'p14'}],
-//                                            [{name:'p14'}, {name:'p15'}]
-//                                        ]
                                     },
                                     markPoint:{
                                         symbol:'image://./image/location.svg',
@@ -355,41 +338,23 @@
                                         data:[
                                             {name:'p1',value:50,
                                                 tooltip:{
-                                                    formatter:'时间:8:30am<br/>出发地:中海锦城南苑'
+                                                    formatter:'出发地:浙江省宁波市鄞州区'
                                                 },
                                             },
-                                            {name:'p16',value:100,
+                                            {name:'p600',value:50,
                                                 tooltip:{
-                                                    formatter:'天河城<br/>经度:113.328755<br/>纬度:23.137588'
+                                                    formatter:'目的地：江西省南昌市青山湖区'
                                                 },
                                             },
-                                            {name:'p15',value:50,
+                                            {name:'p891',value:50,
                                                 tooltip:{
-                                                    formatter:'时间:10:00am<br/>目的地:富力盈隆广场'
+                                                    formatter:'返程终点：浙江省宁波市鄞州区'
                                                 },
                                             },
                                         ],
                                     },
+									//指定点的坐标
 									geoCoord : coordinates,
-
-//                                    geoCoord:{
-//                                        'p1':[113.317568,23.135959],
-//                                        'p2':[113.317783,23.135278],
-//                                        'p3':[113.321489,23.135432],
-//                                        'p4':[113.321525,23.135282],
-//                                        'p5':[113.321592,23.13517],
-//                                        'p6':[113.321799,23.135083],
-//                                        'p7':[113.322158,23.135141],
-//                                        'p8':[113.322374,23.135378],
-//                                        'p9':[113.321992,23.135847],
-//                                        'p10':[113.322243,23.13949],
-//                                        'p11':[113.322396,23.1397],
-//                                        'p12':[113.328163,23.13943],
-//                                        'p13':[113.334945,23.139033],
-//                                        'p14':[113.334658,23.133217],
-//                                        'p15':[113.33313,23.13222],
-//                                        'p16':[113.328755, 23.137588]
-//                                    }
                                 },
                             ]
                         };

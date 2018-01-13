@@ -10,10 +10,10 @@
 package dataVisualization.service;
 
 import com.github.abel533.entity.Example;
+import dataVisualization.pojo.Record;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import dataVisualization.mapper.RecordMapper;
-import dataVisualization.pojo.Record;
 
 import java.util.List;
 
@@ -39,7 +39,6 @@ public class RecordServiceImpl implements RecordService {
 		Example.Criteria criteria = example.createCriteria();
 		criteria.andEqualTo("code", code);
 		List<Record> result = recordMapper.selectByExample(example);
-
 		return result;
 	}
 }
