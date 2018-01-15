@@ -60,19 +60,20 @@
             async : false, //同步执行
             url : "getJson.do?code=浙B8S196",//请求地址，返回json数据的链接或action
             data : {},
-            dataType : "json", //自动将返回的字符串转化为json对象。
-            success : function(result) {//成功执行方法：将获取到的数据存入arr list中
+            dataType : "json", //预期服务器返回的数据类型。
+            success : function(result) {//参数：由服务器返回，并根据 dataType 参数进行处理后的数据；描述状态的字符串。成功执行方法：将获取到的数据存入arr list中
                 if (result) {
                     console.log(result)
                     for(var i=0;i<result.length;i++){
                         // console.log(result[i].diming);
-                        arr.push(result[i].diming);
+                        arr.push(result[i].diming);//如果后台修改数据库语句返回的不是整个对象，就不需要把数据插入数组了。
                         // arr.push(result)
                         console.log(arr)
                     }
                 }
             },
-            error : function(errorMsg) {//错误执行方法
+            error :
+                function(errorMsg) {//错误执行方法
                 alert("不好意思,图表请求数据失败啦!");
                 myChart.hideLoading();
             }
@@ -115,7 +116,7 @@
 
 
                     }else{
-                        alert('百度没有找到地址信息')
+                        // alert('百度没有找到地址信息')
                     }
                 })
             }

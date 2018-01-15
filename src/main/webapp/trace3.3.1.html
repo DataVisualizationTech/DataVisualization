@@ -45,8 +45,8 @@
             async : false, //同步执行
             url : "getJson.do?code=浙B8S196",//请求地址，返回json数据的链接或action
             data : {},
-            dataType : "json", //自动将返回的字符串转化为json对象。
-            success : function(result) {//成功执行方法：将获取到的数据存入arr list中
+            dataType : "json", //预期服务器返回的数据类型。
+            success : function(result) {//参数：由服务器返回，并根据 dataType 参数进行处理后的数据；描述状态的字符串。成功执行方法：将获取到的数据存入arr list中
                 if (result) {
                     console.log(result)
                     for(var i=0;i<result.length;i++){
@@ -84,8 +84,11 @@
         map.clearOverlays();                        //清除地图上所有的覆盖物
         var driving = new BMap.DrivingRoute(map);    //创建驾车实例
         var point=[]
+
         for(var i=0;i<data.length;i++){
-            point.push(new BMap.Point(data[i][0],data[i][1]))
+
+            point.push(new BMap.Point(data[i][0],data[i][1]));
+
         }
 
         for(var i=0;i<point.length-1;i++){
@@ -113,11 +116,11 @@
             // map.addOverlay(m2);
             // map.addOverlay(m3);
             var lab1 = new BMap.Label("起点",{position:point[0]});        //创建3个label
-            for(var i=1;i<point.length-1;i++){
-                var lab2 = new BMap.Label("途径点"+i,{position:point[i]});
-                map.addOverlay(lab2);
-
-            }
+            // for(var i=1;i<point.length-1;i++){
+            //     var lab2 = new BMap.Label("途径点"+i,{position:point[i]});
+            //     // map.addOverlay(lab2);
+            //
+            // }
             // var lab2 = new BMap.Label("途径点",{position:myP2});
             var lab3 = new BMap.Label("终点",{position:point[data.length-1]});
             map.addOverlay(lab1);

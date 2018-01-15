@@ -26,6 +26,9 @@ import java.util.List;
 public interface RecordService {
 
 	public List<Record> getRecordsByCode(String code);
+//	public List<Record> getTop50RecordsByCode(String code);
+	public List<Record> getRecords(String gpstime);
+
 
 }
   

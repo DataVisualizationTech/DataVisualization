@@ -33,6 +33,7 @@ public class RecordServiceImpl implements RecordService {
 	@Autowired
 	private RecordMapper recordMapper;
 
+
 	@Override
 	public List<Record> getRecordsByCode(String code) {
 		Example example = new Example(Record.class);
@@ -40,7 +41,32 @@ public class RecordServiceImpl implements RecordService {
 		criteria.andEqualTo("code", code);
 		List<Record> result = recordMapper.selectByExample(example);
 
+//		result=result.subList(0,800);
 		return result;
 	}
+
+
+
+    @Override
+    public List<Record> getRecords(String gpstime) {
+        // TODO Auto-generated method stub
+        Example example = new Example(Record.class);
+        Example.Criteria criteria = example.createCriteria();
+        //criteria.andEqualTo("gpstime", gpstime);
+        criteria.andLike("gpstime",gpstime);
+        List<Record> result = recordMapper.selectByExample(example);
+        return result;
+    }
+
+//    @Override
+//    public List<Record> getTop50RecordsByCode(String code) {
+//        Example example = new Example(Record.class);
+//        Example.Criteria criteria = example.createCriteria();
+//        criteria.andEqualTo("code", code);
+//        List<Record> result = recordMapper.selectByExample(example);
+//
+////		result=result.subList(0,800);
+//        return result;
+//    }
 }
   

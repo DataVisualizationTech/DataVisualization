@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+
+   </head>
+   <body style="height: 100%; margin: 0">
+		<div id="input">
+	   			<input type="text" id="gps" />
+	   			<input type="submit" onclick="submit()" />
+   		</div>
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+	   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	   <script src="./js/jquery.min.js"></script>
+	   <script src="./js/require.js"></script>
+	   <script type="text/javascript" src="js/jquery-1.11.0.js"></script>
+	   <script type="text/javascript" src="js/bootstrap.js"></script>
+       <script type="text/javascript">
+
+var dom = document.getElementById("container");
+//初始化echarts实例
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+
+var dataOne = {};
+var dataTwo = [];
+var gpstimeValue;
+myChart.showLoading();
+
+var convertData = function (data) {
+    var res = [];
+    for (var i = 0; i < data.length; i++) {
+        var geoCoord = dataOne[data[i].name];
+        if (geoCoord) {
+            res.push({
+                name: data[i].name,
+                value: geoCoord.concat(data[i].value)
+            });
+        }
+    }
+    return res;
+};
+
+function submit(){
+	gpstimeValue = document.getElementById("gps").value;
+
+	//生成一个对象
+	var VueApp = new Vue({
+	    el: "#book_list",
+	    data: {
+	    },
+	    //钩子函数，当所有DOM挂载在页面上时，加载此方法，相当于window.onload=function(){}
+	    mounted:function(){
+	        //					//需要用$nextTick来保证所有节点挂载后才执行方法
+	        this.$nextTick(function(){
+	            this.bookView();
+	        })
+	    },
+	    methods:{
+	        bookView:function(){
+	            var _this = this;
+	            console.log(" ---------- 执行网络请求");
+	            //Vue.source插件，目前已经被axios代替
+	            axios.get('http://localhost:8080/getGPS.do?gpstime=' + gpstimeValue)
+	                .then(function(res){
+	                    console.log(res.data);
+	                    //获取数据
+	                    dataOne = res.data.coordinates
+						dataTwo = res.data.sequences
+						//绘制图形
+						myChart.hideLoading();
+						option = {
+							    backgroundColor: '#404a59',
+							    title: {
+							        text: '不同时刻车辆位置',
+							        subtext: 'data from GPS.in',
+							        sublink: 'http://www.pm25.in',
+							        x:'center',
+							        textStyle: {
+							            color: '#fff'
+							        }
+							    },
+							    tooltip: {
+							        trigger: 'item',
+							        formatter: function (params) {
+//							            return params.name + ' : ' + params.value[2];
+
+										var time = params.value[2];
+										var date = new Date(time).Format("yyyy-MM-dd HH:mm:ss");
+										return params.name + ' : ' + date.toString();
+							        }
+							    },
+								//布局
+							    legend: {
+							        orient: 'vertical',
+							        y: 'bottom',
+							        x: 'right',
+							        data:['GPS'],
+							        textStyle: {
+							            color: '#fff'
+							        }
+							    },
+							    visualMap: {
+							        min: 1468884280000,
+							        max: 1468884281000,
+									text:['最晚','最早'],
+							        calculable: true,
+							        inRange: {
+							            color: ['#50a3ba', '#eac736', '#d94e5d']
+							        },
+							        textStyle: {
+							            color: '#fff'
+							        }
+							    },
+							    geo: {
+							        map: 'china',
+							        label: {
+							            emphasis: {
+							                show: false
+							            }
+							        },
+									roam: true,
+							        itemStyle: {
+							            normal: {
+							                areaColor: '#323c48',
+							                borderColor: '#111'
+							            },
+							            emphasis: {
+							                areaColor: '#2a333d'
+							            }
+							        }
+							    },
+							    series: [
+							        {
+							            name: 'GPS',
+							            type: 'scatter',
+							            coordinateSystem: 'geo',
+										symbolSize: 12,
+							            label: {
+							                normal: {
+							                    show: false
+							                },
+							                emphasis: {
+							                    show: false
+							                }
+							            },
+										itemStyle: {
+							                emphasis: {
+							                    borderColor: '#fff',
+							                    borderWidth: 1
+							                }
+							            },
+							            data: convertData(dataTwo)
+							        }
+							        ]
+							    };
+							    if (option && typeof option === "object") {
+							        myChart.setOption(option, true);
+							    }
+	                })
+	                .catch(function(error){
+	                    console.log(error);
+	                });
+		        }
+		    }
+		});
+}
+//设定日期格式
+Date.prototype.Format = function (fmt) { //author: meizz
+    var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "H+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+
+
+
+
+
+
+       </script>
+   </body>
+</html>

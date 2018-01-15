@@ -11,4 +11,7 @@ import java.util.List;
 @CacheConfig(cacheNames = "books")
 public interface RecordMapper extends Mapper<Record>{
     List<Record> getRecordsByCode(@Param("code") String code);
+//    List<Record> getTop50RecordsByCode(@Param("code") String code);
+    List<Record> getRecords(@Param("gpstime") String gpstime);
+
 }
